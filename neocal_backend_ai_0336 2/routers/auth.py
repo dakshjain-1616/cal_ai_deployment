@@ -1,13 +1,16 @@
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
-from database.db import get_db
+from fastapi import APIRouter
 from models.schemas import AnonymousSessionResponse
-from services.auth import create_user, create_session
 
 router = APIRouter(tags=["auth"])
 
 @router.post("/auth/anonymous-session", response_model=AnonymousSessionResponse)
-async def create_anonymous_session(db: Session = Depends(get_db)):
-    user = create_user(db)
-    session = create_session(db, user.user_id)
-    return AnonymousSessionResponse(token=session.token, user_id=user.user_id)
+async def create_anonymous_session():
+    """
+    Auth/session disabled: return a static demo token and user.
+
+    This completely removes DB and session logic from this endpoint so it
+    cannot 500 due to database issues on Vercel. The rest of the API uses
+    a shared 'demo_user' via verify_token, so this token is effectively a
+    dummy value kept only to satisfy existing mobile/web client code.
+    """
+    return AnonymousSessionResponse(token="demo-token", user_id="demo_user")
