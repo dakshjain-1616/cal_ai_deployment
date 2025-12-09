@@ -1,0 +1,6 @@
+#!/usr/bin/env node
+require('bare-runtime/spawn')(__filename, {
+  stdio: 'inherit',
+  suppressSignals: true,
+  forwardExitCode: true
+})

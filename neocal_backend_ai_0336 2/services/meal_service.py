@@ -12,7 +12,14 @@ def create_meal_from_text(db: Session, user_id: str, description: str):
 
 def create_meal_from_image(db: Session, user_id: str, image_url: str):
     parsed_foods = parse_image_meal(image_url)
-    return _create_meal(db, user_id, image_url, parsed_foods, "image")
+    # If AI returned explicit calories/macros, trust them and skip lookup
+    has_macros = False
+    for f in parsed_foods:
+        if any(k in f for k in ("calories", "protein_g", "carbs_g", "fat_g")):
+            has_macros = True
+            break
+
+    return _create_meal(db, user_id, image_url, parsed_foods, "image", skip_lookup=has_macros)
 
 def create_meal_from_barcode(db: Session, user_id: str, barcode: str, serving_description: str = None, servings: int = 1):
     product = parse_barcode_meal(barcode, serving_description, servings)
@@ -131,6 +138,40 @@ def get_meals_for_date(db: Session, user_id: str, date_str: str):
         results.append(format_meal_response(meal, food_items))
     
     return results
+
+
+def get_meals_for_range(db: Session, user_id: str, start_date_str: str, end_date_str: str):
+    from datetime import datetime as dt
+    try:
+        start_obj = dt.strptime(start_date_str, "%Y-%m-%d")
+        end_obj = dt.strptime(end_date_str, "%Y-%m-%d")
+    except Exception:
+        return None
+
+    start_time = dt.combine(start_obj.date(), dt.min.time())
+    end_time = dt.combine(end_obj.date(), dt.max.time())
+
+    meals = db.query(Meal).filter(
+        Meal.user_id == user_id,
+        Meal.timestamp >= start_time,
+        Meal.timestamp <= end_time
+    ).order_by(Meal.timestamp).all()
+
+    results = []
+    for meal in meals:
+        food_items = db.query(FoodItem).filter(FoodItem.meal_id == meal.meal_id).all()
+        results.append(format_meal_response(meal, food_items))
+
+    return results
+
+
+def create_meal_from_structured(db: Session, user_id: str, foods: list, original_input: str = "manual"):
+    """Create a meal record from a structured list of food dicts.
+
+    Each food dict should include at least: name, grams. If calories/proteins provided, they will be used.
+    """
+    # Reuse private _create_meal helper
+    return _create_meal(db, user_id, original_input, foods, "manual", skip_lookup=True)
 
 def delete_meal(db: Session, user_id: str, meal_id: str) -> bool:
     meal = (

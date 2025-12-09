@@ -59,6 +59,8 @@ class DailySummaryResponse(BaseModel):
     total_calories: float
     total_macros: Macros
     remaining_calories: float
+    total_water: Optional[int] = 0
+    total_exercise: Optional[int] = 0
 
 
 class WaterLogRequest(BaseModel):

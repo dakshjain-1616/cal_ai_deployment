@@ -2,16 +2,21 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
-# Always use a local SQLite file inside this project
+# Use DATABASE_URL env var when provided (e.g., postgres://...), otherwise fall back to local SQLite
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DB_PATH = os.path.join(BASE_DIR, "neocal_demo.db")
-DATABASE_URL = f"sqlite:///{DB_PATH}"
+default_sqlite_path = os.path.join(BASE_DIR, "neocal_demo.db")
+DATABASE_URL = os.environ.get("DATABASE_URL") or f"sqlite:///{default_sqlite_path}"
 
 # SQLAlchemy engine
+engine_kwargs = {"echo": False}
+connect_args = None
+if DATABASE_URL.startswith("sqlite"):
+    connect_args = {"check_same_thread": False}
+
 engine = create_engine(
     DATABASE_URL,
-    connect_args={"check_same_thread": False},
-    echo=False,
+    connect_args=connect_args,
+    **engine_kwargs,
 )
 
 # Session factory

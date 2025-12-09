@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Camera, Upload, X, CheckCircle, Loader, Search } from 'lucide-react';
-import { analyzeFoodImage, logMeal, searchFood } from '../services/api';
+import { analyzeFoodImage, logMeal, logMealFromImage, searchFood } from '../services/api';
 import { useNavigate } from 'react-router-dom';
 
 const FoodScanner = ({ profile }) => {
@@ -82,6 +82,10 @@ const FoodScanner = ({ profile }) => {
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
+      if (!file.type.startsWith('image/')) {
+        setError('Please upload a valid image file.');
+        return;
+      }
       // For preview
       const reader = new FileReader();
       reader.onload = (event) => {
@@ -91,6 +95,8 @@ const FoodScanner = ({ profile }) => {
       reader.readAsDataURL(file);
       // Send file to backend
       analyzeImageFile(file);
+    } else {
+      setError('No file selected.');
     }
   };
 
@@ -98,12 +104,29 @@ const FoodScanner = ({ profile }) => {
   const analyzeImageFile = async (file) => {
     setAnalyzing(true);
     setError(null);
+    setResult(null);
     try {
+      if (!(file instanceof File || file instanceof Blob)) {
+        setError('Invalid image file.');
+        setAnalyzing(false);
+        return;
+      }
       const analysis = await logMealFromImage(file);
-      setResult(analysis);
+      // Defensive: check for required fields in response
+      if (!analysis || (!analysis.food_name && !analysis.foods)) {
+        setError('No food detected in image. Please try another photo.');
+        setResult(null);
+      } else {
+        setResult(analysis);
+      }
     } catch (err) {
       console.error('Error analyzing image:', err);
-      setError('Failed to analyze image. Please try again.');
+      let msg = 'Failed to analyze image. Please try again.';
+      if (err?.response?.data?.detail) {
+        msg += ' ' + err.response.data.detail;
+      }
+      setError(msg);
+      setResult(null);
     } finally {
       setAnalyzing(false);
     }
@@ -146,6 +169,16 @@ const FoodScanner = ({ profile }) => {
   };
 
   const saveMeal = async () => {
+    // If result came from image analysis, meal is already saved by backend
+    if (result && result.foods) {
+      // Just show success and redirect
+      setImageData(null);
+      setResult(null);
+      setMode(null);
+      navigate('/');
+      return;
+    }
+    // For search/manual entry, call logMeal
     try {
       await logMeal({
         food_name: result.food_name,
@@ -156,8 +189,6 @@ const FoodScanner = ({ profile }) => {
         serving_size: result.serving_size,
         date: new Date().toDateString()
       });
-      
-      // Reset and navigate to dashboard
       setImageData(null);
       setResult(null);
       setMode(null);

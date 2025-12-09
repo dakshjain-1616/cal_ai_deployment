@@ -1,0 +1,66 @@
+{
+  "name": "bare",
+  "version": "1.24.2",
+  "description": "Small and modular JavaScript runtime for desktop and mobile",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "require": "./index.cjs",
+      "import": "./index.mjs"
+    }
+  },
+  "bin": {
+    "bare": "bin/bare"
+  },
+  "files": [
+    "index.cjs",
+    "index.mjs",
+    "index.d.ts",
+    "bin"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/holepunchto/bare.git"
+  },
+  "author": "Holepunch",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/holepunchto/bare/issues"
+  },
+  "homepage": "https://github.com/holepunchto/bare",
+  "dependencies": {
+    "bare-runtime": "1.24.2"
+  },
+  "peerDependencies": {
+    "bare-buffer": "*",
+    "bare-console": "*",
+    "bare-events": "*",
+    "bare-queue-microtask": "*",
+    "bare-structured-clone": "*",
+    "bare-timers": "*",
+    "bare-url": "*"
+  },
+  "peerDependenciesMeta": {
+    "bare-buffer": {
+      "optional": true
+    },
+    "bare-console": {
+      "optional": true
+    },
+    "bare-events": {
+      "optional": true
+    },
+    "bare-queue-microtask": {
+      "optional": true
+    },
+    "bare-structured-clone": {
+      "optional": true
+    },
+    "bare-timers": {
+      "optional": true
+    },
+    "bare-url": {
+      "optional": true
+    }
+  }
+}
