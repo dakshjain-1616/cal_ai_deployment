@@ -32,12 +32,21 @@ def create_session(db: Session, user_id: str):
     return db_session
 
 def verify_token(db: Session, token: str):
-    session = db.query(DBSession).filter(DBSession.token == token).first()
-    if not session:
-        return None
-    if session.expires_at and datetime.utcnow() > session.expires_at:
-        return None
-    return session.user_id
+    """
+    No-op auth: always return a shared demo user.
+
+    This effectively disables authentication while keeping the same API shape.
+    Any token (or even a missing/invalid one, once headers are relaxed)
+    will be mapped to the same demo user so the rest of the app continues to work.
+    """
+    demo_user_id = "demo_user"
+
+    # Ensure the demo user exists
+    user = db.query(User).filter(User.user_id == demo_user_id).first()
+    if not user:
+        user = create_user(db, demo_user_id)
+
+    return user.user_id
 
 def get_user(db: Session, user_id: str):
     return db.query(User).filter(User.user_id == user_id).first()

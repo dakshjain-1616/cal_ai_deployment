@@ -2,10 +2,19 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
-# Use DATABASE_URL env var when provided (e.g., postgres://...), otherwise fall back to local SQLite
+# Use DATABASE_URL env var when provided (e.g., postgres://...).
+# Otherwise fall back to SQLite. On Vercel the code directory is read-only,
+# so use /tmp for the default DB path so writes succeed.
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-default_sqlite_path = os.path.join(BASE_DIR, "neocal_demo.db")
-DATABASE_URL = os.environ.get("DATABASE_URL") or f"sqlite:///{default_sqlite_path}"
+
+# Prefer DATABASE_URL if set (e.g. for local dev you can set it to sqlite:///./database/neocal_demo.db)
+env_db_url = os.environ.get("DATABASE_URL")
+if env_db_url:
+    DATABASE_URL = env_db_url
+else:
+    # Default writable path for serverless/container platforms
+    default_sqlite_path = os.path.join("/tmp", "neocal_demo.db")
+    DATABASE_URL = f"sqlite:///{default_sqlite_path}"
 
 # SQLAlchemy engine
 engine_kwargs = {"echo": False}

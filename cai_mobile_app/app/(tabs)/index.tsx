@@ -85,20 +85,21 @@ export default function DashboardScreen() {
       await ensureSession()
       const today = new Date().toISOString().split('T')[0]
       const response = await summaryApi.getDailySummary(today)
-      setSummary(response.data)
-    } catch (error) {
+      setSummary(response.data as DailySummary)
+    } catch (error: any) {
       console.error('Error fetching summary:', error)
       const status = error?.response?.status
+      const detail = error?.response?.data?.detail as string | undefined
+      const message = error?.message as string | undefined
 
-      // If the backend returns 404 for /summary/day, treat it as "no data yet"
-      // instead of surfacing an error on the dashboard.
-      if (status === 404) {
-        console.warn('Summary endpoint returned 404, treating as no data for dashboard')
+      // If the backend returns 404 or "Not Found" for /summary/day,
+      // treat it as "no data yet" instead of surfacing an error.
+      if (status === 404 || detail === 'Not Found' || message?.includes('404')) {
+        console.warn('Summary endpoint returned 404/Not Found, treating as no data for dashboard')
         setSummary(null)
         setError(null)
       } else {
-        const msg = error?.response?.data?.detail || error?.message || 'Failed to load dashboard data'
-        setError(msg)
+        setError(detail || message || 'Failed to load dashboard data')
       }
     } finally {
       setLoading(false)
