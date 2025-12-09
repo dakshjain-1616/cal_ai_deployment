@@ -351,3 +351,23 @@ For detailed information, see the documentation files.
 Questions? Check COMMANDS_REFERENCE.md for troubleshooting.
 
 Happy coding! 💪
+
+---
+
+## Monorepo layout for deployment
+
+This repo contains three separate apps that you deploy/run independently:
+
+- **Backend (FastAPI)** – `neocal_backend_ai_0336 2/`
+  - Deploy on Vercel using Docker
+  - See `neocal_backend_ai_0336 2/DEPLOY_VERCEL.md`
+- **Web frontend (React)** – `fe_2/`
+  - Deploy on Vercel as a static build
+  - See `fe_2/vercel.json` and `fe_2/src/services/api.js` (uses `REACT_APP_BACKEND_URL`)
+- **Mobile app (Expo)** – `cai_mobile_app/`
+  - Run via Expo Go / EAS, pointing to the same backend URL
+  - See `cai_mobile_app/src/services/api.js` (uses `EXPO_PUBLIC_BACKEND_URL`)
+
+For a full explanation of how these fit together and how to deploy them, see:
+
+- `MONOREPO_DEPLOYMENT.md`
