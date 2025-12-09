@@ -11,7 +11,6 @@ from services.water_service import (
     delete_water_log,
     get_water_logs_for_date,
 )
-
 router = APIRouter(tags=["water"])
 
 
@@ -22,7 +21,7 @@ async def get_current_user(
     Auth disabled: always return a shared demo user.
 
     We keep this dependency so routes still receive a user_id, but we ignore
-    any headers and rely on verify_token's demo-user behavior.
+    any headers and rely on verify_token's demo-user behavior
     """
     return verify_token(db, "")
 
