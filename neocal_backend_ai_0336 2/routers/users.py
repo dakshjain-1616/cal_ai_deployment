@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Header
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database.db import get_db
 from models.schemas import UserProfileResponse, ProfileUpdateRequest
@@ -6,15 +6,14 @@ from services.auth import verify_token, get_user
 
 router = APIRouter(tags=["user"])
 
-async def get_current_user(x_auth_token: str = Header(None), db: Session = Depends(get_db)):
-    if not x_auth_token:
-        raise HTTPException(status_code=401, detail="X-Auth-Token header required")
-    
-    user_id = verify_token(db, x_auth_token)
-    if not user_id:
-        raise HTTPException(status_code=401, detail="Invalid or expired token")
-    
-    return user_id
+async def get_current_user(db: Session = Depends(get_db)) -> str:
+    """
+    Auth disabled: always return a shared demo user via verify_token.
+
+    We ignore headers and just rely on verify_token's demo-user behavior so
+    the rest of the API continues to work without requiring X-Auth-Token.
+    """
+    return verify_token(db, "")
 
 @router.get("/user/profile", response_model=UserProfileResponse)
 async def get_profile(user_id: str = Depends(get_current_user), db: Session = Depends(get_db)):

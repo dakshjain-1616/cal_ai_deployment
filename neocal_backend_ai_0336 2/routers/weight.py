@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from fastapi import APIRouter, Depends, Header, HTTPException, Query, Response
+from fastapi import APIRouter, Depends, HTTPException, Query, Response
 from sqlalchemy.orm import Session
 
 from database.db import get_db
@@ -16,17 +16,12 @@ router = APIRouter(tags=["weight"])
 
 
 async def get_current_user(
-    x_auth_token: Optional[str] = Header(None),
     db: Session = Depends(get_db),
 ) -> str:
-    if not x_auth_token:
-        raise HTTPException(status_code=401, detail="X-Auth-Token header required")
-
-    user_id = verify_token(db, x_auth_token)
-    if not user_id:
-        raise HTTPException(status_code=401, detail="Invalid or expired token")
-
-    return user_id
+    """
+    Auth disabled: always return a shared demo user.
+    """
+    return verify_token(db, "")
 
 
 @router.post("/weight", response_model=WeightLogResponse, status_code=201)

@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from fastapi import APIRouter, Depends, Header, HTTPException, Query, Response
+from fastapi import APIRouter, Depends, HTTPException, Query, Response
 from sqlalchemy.orm import Session
 
 from database.db import get_db
@@ -16,17 +16,15 @@ router = APIRouter(tags=["water"])
 
 
 async def get_current_user(
-    x_auth_token: Optional[str] = Header(None),
     db: Session = Depends(get_db),
 ) -> str:
-    if not x_auth_token:
-        raise HTTPException(status_code=401, detail="X-Auth-Token header required")
+    """
+    Auth disabled: always return a shared demo user.
 
-    user_id = verify_token(db, x_auth_token)
-    if not user_id:
-        raise HTTPException(status_code=401, detail="Invalid or expired token")
-
-    return user_id
+    We keep this dependency so routes still receive a user_id, but we ignore
+    any headers and rely on verify_token's demo-user behavior.
+    """
+    return verify_token(db, "")
 
 
 @router.post("/water", response_model=WaterLogResponse, status_code=201)
