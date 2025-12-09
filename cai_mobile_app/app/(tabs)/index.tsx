@@ -14,11 +14,27 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { summaryApi, ensureSession } from '@/src/services/api'
 
+// Types matching backend DailySummaryResponse
+type Macros = {
+  protein_g: number
+  carbs_g: number
+  fat_g: number
+}
+
+type DailySummary = {
+  date: string
+  total_calories: number
+  total_macros: Macros
+  remaining_calories: number
+  total_water?: number
+  total_exercise?: number
+}
+
 export default function DashboardScreen() {
-  const [summary, setSummary] = useState(null)
+  const [summary, setSummary] = useState<DailySummary | null>(null)
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
-  const [error, setError] = useState(null)
+  const [error, setError] = useState<string | null>(null)
   const [calorieGoal, setCalorieGoal] = useState(2000)
   const [showSetGoalModal, setShowSetGoalModal] = useState(false)
   const [draftGoal, setDraftGoal] = useState('')
@@ -45,7 +61,7 @@ export default function DashboardScreen() {
     }
   }
 
-  const saveCalorieGoal = async (value) => {
+  const saveCalorieGoal = async (value: string) => {
     try {
       const v = parseInt(value, 10)
       if (Number.isNaN(v) || v <= 0) {
@@ -72,8 +88,18 @@ export default function DashboardScreen() {
       setSummary(response.data)
     } catch (error) {
       console.error('Error fetching summary:', error)
-      const msg = error?.response?.data?.detail || error?.message || 'Failed to load dashboard data'
-      setError(msg)
+      const status = error?.response?.status
+
+      // If the backend returns 404 for /summary/day, treat it as "no data yet"
+      // instead of surfacing an error on the dashboard.
+      if (status === 404) {
+        console.warn('Summary endpoint returned 404, treating as no data for dashboard')
+        setSummary(null)
+        setError(null)
+      } else {
+        const msg = error?.response?.data?.detail || error?.message || 'Failed to load dashboard data'
+        setError(msg)
+      }
     } finally {
       setLoading(false)
     }
