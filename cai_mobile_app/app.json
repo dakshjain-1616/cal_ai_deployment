@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "cai_mobile_app",
-    "slug": "cai_mobile_app",
+    "slug": "calaiclone",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -9,7 +9,11 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.dakshneosorganization.calaiclone",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -43,6 +47,19 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "a72ee1f1-7883-4fb6-8ee7-4907fadac513"
+      }
+    },
+    "owner": "dakshneos-organization",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/a72ee1f1-7883-4fb6-8ee7-4907fadac513"
     }
   }
 }
