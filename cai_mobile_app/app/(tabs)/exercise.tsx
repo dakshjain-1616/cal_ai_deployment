@@ -9,6 +9,7 @@ import {
   Alert,
   ActivityIndicator
 } from 'react-native'
+import Toast from 'react-native-toast-message'
 import { exerciseApi, ensureSession, pingBackend } from '@/src/services/api'
 
 export default function ExerciseTrackerScreen() {
@@ -68,7 +69,11 @@ export default function ExerciseTrackerScreen() {
           caloriesBurned,
           intensity
         })
-        Alert.alert('✅ Success', `Logged ${duration} minutes of ${exerciseType}`)
+        Toast.show({
+          type: 'success',
+          text1: `${intensity.charAt(0).toUpperCase() + intensity.slice(1)} ${exerciseType} Added!`,
+          text2: `Logged ${duration} minutes, burned ~${caloriesBurned} kcal`
+        })
         setExerciseType('')
         setDuration('')
         setIntensity('moderate')
@@ -176,23 +181,28 @@ export default function ExerciseTrackerScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#0f0f0f',
     padding: 16
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 24,
-    color: '#333'
+    fontSize: 28,
+    fontWeight: '700',
+    marginBottom: 32,
+    color: '#ffffff',
+    textAlign: 'center',
+    textShadowColor: 'rgba(0,0,0,0.3)',
+    textShadowOffset: {width: 0, height: 2},
+    textShadowRadius: 4
   },
   section: {
-    marginBottom: 20
+    marginBottom: 24
   },
   sectionTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '600',
-    marginBottom: 12,
-    color: '#333'
+    marginBottom: 16,
+    color: '#ffffff',
+    textAlign: 'center'
   },
   grid: {
     flexDirection: 'row',
@@ -201,34 +211,46 @@ const styles = StyleSheet.create({
   },
   typeButton: {
     width: '48%',
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    paddingVertical: 12,
-    marginBottom: 8,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderRadius: 16,
+    paddingVertical: 16,
+    marginBottom: 12,
     alignItems: 'center',
-    borderWidth: 2,
-    borderColor: '#ddd'
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.2)',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 4},
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6
   },
   typeButtonActive: {
-    backgroundColor: '#FF9800',
-    borderColor: '#FF9800'
+    backgroundColor: '#FF6B35',
+    borderColor: '#FF6B35',
+    transform: [{scale: 1.05}]
   },
   typeButtonText: {
-    fontSize: 14,
-    color: '#666',
-    fontWeight: '500'
+    fontSize: 16,
+    color: '#ffffff',
+    fontWeight: '600'
   },
   typeButtonTextActive: {
-    color: '#fff'
+    color: '#ffffff'
   },
   input: {
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    fontSize: 14,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    fontSize: 16,
     borderWidth: 1,
-    borderColor: '#ddd'
+    borderColor: 'rgba(255,255,255,0.2)',
+    color: '#ffffff',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3
   },
   intensityContainer: {
     flexDirection: 'row',
@@ -236,41 +258,54 @@ const styles = StyleSheet.create({
   },
   intensityButton: {
     flex: 1,
-    marginHorizontal: 4,
-    paddingVertical: 10,
-    paddingHorizontal: 8,
-    backgroundColor: '#fff',
-    borderRadius: 8,
+    marginHorizontal: 6,
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderRadius: 12,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#ddd'
+    borderColor: 'rgba(255,255,255,0.2)',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3
   },
   intensityButtonActive: {
-    backgroundColor: '#2196F3',
-    borderColor: '#2196F3'
+    backgroundColor: '#4ECDC4',
+    borderColor: '#4ECDC4',
+    transform: [{scale: 1.05}]
   },
   intensityButtonText: {
-    fontSize: 12,
-    color: '#666',
-    fontWeight: '500'
+    fontSize: 14,
+    color: '#ffffff',
+    fontWeight: '600'
   },
   intensityButtonTextActive: {
-    color: '#fff'
+    color: '#ffffff'
   },
   logButton: {
-    backgroundColor: '#FF9800',
-    borderRadius: 8,
-    paddingVertical: 14,
+    backgroundColor: '#FF6B35',
+    borderRadius: 20,
+    paddingVertical: 18,
     alignItems: 'center',
-    marginTop: 24,
-    marginBottom: 32
+    marginTop: 32,
+    marginBottom: 40,
+    shadowColor: '#FF6B35',
+    shadowOffset: {width: 0, height: 6},
+    shadowOpacity: 0.4,
+    shadowRadius: 12,
+    elevation: 8
   },
   disabledButton: {
-    backgroundColor: '#ccc'
+    backgroundColor: '#666',
+    shadowOpacity: 0.1
   },
   logButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600'
+    color: '#ffffff',
+    fontSize: 18,
+    fontWeight: '700',
+    letterSpacing: 1
   }
 })

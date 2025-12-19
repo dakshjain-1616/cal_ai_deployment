@@ -9,6 +9,7 @@ import {
   Alert,
   ActivityIndicator
 } from 'react-native'
+import Toast from 'react-native-toast-message'
 import { waterApi, ensureSession } from '@/src/services/api'
 
 export default function WaterTrackerScreen() {
@@ -17,7 +18,7 @@ export default function WaterTrackerScreen() {
 
   const commonAmounts = [250, 500, 750, 1000]
 
-  const handleLogWater = async (amount) => {
+  const handleLogWater = async (amount: number) => {
     if (!amount || amount <= 0) {
       Alert.alert('Invalid', 'Please enter a valid water amount')
       return
@@ -27,9 +28,13 @@ export default function WaterTrackerScreen() {
     try {
       await ensureSession()
       await waterApi.logWater(amount)
-      Alert.alert('✅ Success', `Logged ${amount}ml of water`)
+      Toast.show({
+        type: 'success',
+        text1: 'Water Added!',
+        text2: `Logged ${amount}ml of water`
+      })
       setCustomAmount('')
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error logging water:', error)
       const msg = error?.response?.data?.detail || error?.message || 'Failed to log water'
       Alert.alert('❌ Error', msg)
@@ -100,23 +105,28 @@ export default function WaterTrackerScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#0f0f0f',
     padding: 16
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 24,
-    color: '#333'
+    fontSize: 28,
+    fontWeight: '700',
+    marginBottom: 32,
+    color: '#ffffff',
+    textAlign: 'center',
+    textShadowColor: 'rgba(0,0,0,0.3)',
+    textShadowOffset: {width: 0, height: 2},
+    textShadowRadius: 4
   },
   section: {
     marginBottom: 24
   },
   sectionTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '600',
-    marginBottom: 12,
-    color: '#333'
+    marginBottom: 16,
+    color: '#ffffff',
+    textAlign: 'center'
   },
   buttonGrid: {
     flexDirection: 'row',
@@ -125,61 +135,88 @@ const styles = StyleSheet.create({
   },
   quickButton: {
     width: '48%',
-    backgroundColor: '#2196F3',
-    borderRadius: 8,
-    paddingVertical: 12,
+    backgroundColor: '#45B7D1',
+    borderRadius: 16,
+    paddingVertical: 16,
     marginBottom: 12,
-    alignItems: 'center'
+    alignItems: 'center',
+    shadowColor: '#45B7D1',
+    shadowOffset: {width: 0, height: 4},
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6
   },
   disabledButton: {
-    backgroundColor: '#ccc'
+    backgroundColor: '#666',
+    shadowOpacity: 0.1
   },
   quickButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600'
+    color: '#ffffff',
+    fontSize: 18,
+    fontWeight: '700'
   },
   inputContainer: {
     flexDirection: 'row',
-    gap: 8
+    gap: 12
   },
   input: {
     flex: 1,
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    fontSize: 14,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    fontSize: 16,
     borderWidth: 1,
-    borderColor: '#ddd'
+    borderColor: 'rgba(255,255,255,0.2)',
+    color: '#ffffff',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3
   },
   addButton: {
-    backgroundColor: '#4CAF50',
-    borderRadius: 8,
-    paddingHorizontal: 16,
-    justifyContent: 'center'
+    backgroundColor: '#4ECDC4',
+    borderRadius: 12,
+    paddingHorizontal: 20,
+    justifyContent: 'center',
+    shadowColor: '#4ECDC4',
+    shadowOffset: {width: 0, height: 4},
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6
   },
   addButtonText: {
-    color: '#fff',
-    fontWeight: '600'
+    color: '#ffffff',
+    fontWeight: '700',
+    fontSize: 16
   },
   tipsContainer: {
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    padding: 16,
-    marginTop: 16,
-    marginBottom: 32
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderRadius: 16,
+    padding: 20,
+    marginTop: 24,
+    marginBottom: 40,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.2)',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 4},
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4
   },
   tipsTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 8,
-    color: '#333'
+    fontSize: 18,
+    fontWeight: '700',
+    marginBottom: 12,
+    color: '#4ECDC4',
+    textAlign: 'center'
   },
   tipText: {
-    color: '#666',
-    fontSize: 14,
-    marginBottom: 6,
-    lineHeight: 20
+    color: '#cccccc',
+    fontSize: 15,
+    marginBottom: 8,
+    lineHeight: 22,
+    textAlign: 'center'
   }
 })

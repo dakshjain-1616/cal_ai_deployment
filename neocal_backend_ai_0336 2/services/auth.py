@@ -33,20 +33,15 @@ def create_session(db: Session, user_id: str):
 
 def verify_token(db: Session, token: str):
     """
-    No-op auth: always return a shared demo user.
+    No-op auth: always return a shared demo user ID, creating the user if needed.
 
-    This effectively disables authentication while keeping the same API shape.
-    Any token (or even a missing/invalid one, once headers are relaxed)
-    will be mapped to the same demo user so the rest of the app continues to work.
+    This ensures the demo user exists in the database for queries that require it.
     """
-    demo_user_id = "demo_user"
-
-    # Ensure the demo user exists
-    user = db.query(User).filter(User.user_id == demo_user_id).first()
+    user_id = "demo_user"
+    user = get_user(db, user_id)
     if not user:
-        user = create_user(db, demo_user_id)
-
-    return user.user_id
+        create_user(db, user_id)
+    return user_id
 
 def get_user(db: Session, user_id: str):
     return db.query(User).filter(User.user_id == user_id).first()

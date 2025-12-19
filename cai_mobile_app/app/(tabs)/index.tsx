@@ -231,224 +231,266 @@ export default function DashboardScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#eef6ff',
+    backgroundColor: '#0f0f0f',
     padding: 16
   },
   loadingText: {
     marginTop: 12,
     textAlign: 'center',
-    color: '#666'
+    color: '#cccccc'
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 16,
-    color: '#333'
+    fontSize: 28,
+    fontWeight: '700',
+    marginBottom: 24,
+    color: '#ffffff',
+    textAlign: 'center'
   },
   errorCard: {
-    backgroundColor: '#ffebee',
-    borderRadius: 8,
-    padding: 16,
-    marginBottom: 16,
+    backgroundColor: 'rgba(244, 67, 54, 0.1)',
+    borderRadius: 16,
+    padding: 20,
+    marginBottom: 20,
     borderLeftWidth: 4,
-    borderLeftColor: '#f44336'
+    borderLeftColor: '#f44336',
+    borderWidth: 1,
+    borderColor: 'rgba(244, 67, 54, 0.3)',
+    shadowColor: '#f44336',
+    shadowOffset: {width: 0, height: 4},
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4
   },
   errorText: {
-    color: '#c62828',
-    fontSize: 14,
-    fontWeight: '500'
+    color: '#ff8a80',
+    fontSize: 16,
+    fontWeight: '600'
   },
   errorHint: {
-    color: '#d32f2f',
-    fontSize: 12,
-    marginTop: 6
+    color: '#ffab91',
+    fontSize: 14,
+    marginTop: 8
   },
   card: {
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    padding: 16,
-    marginBottom: 12,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderRadius: 16,
+    padding: 20,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.2)',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3
+    shadowOffset: {width: 0, height: 6},
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
+    elevation: 8
   },
   emptyCard: {
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    padding: 32,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderRadius: 16,
+    padding: 40,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.2)',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 4},
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4
   },
   emptyText: {
-    color: '#999',
-    fontSize: 16
+    color: '#cccccc',
+    fontSize: 18,
+    textAlign: 'center'
   },
   cardTitle: {
-    fontSize: 14,
-    color: '#0066FF',
-    marginBottom: 8
+    fontSize: 16,
+    color: '#4ECDC4',
+    marginBottom: 12,
+    textAlign: 'center'
   },
   cardValue: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#0066FF'
+    fontSize: 32,
+    fontWeight: '800',
+    color: '#ffffff',
+    textAlign: 'center'
   },
   cardSubtitle: {
-    fontSize: 12,
-    color: '#999',
-    marginTop: 4
+    fontSize: 14,
+    color: '#cccccc',
+    marginTop: 8,
+    textAlign: 'center'
   },
   goalCard: {
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    padding: 16,
-    marginBottom: 12,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderRadius: 16,
+    padding: 20,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.2)',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.06,
-    shadowRadius: 2,
-    elevation: 2
+    shadowOffset: {width: 0, height: 4},
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4
   },
   goalText: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: '700',
-    color: '#2196F3'
+    color: '#45B7D1',
+    textAlign: 'center'
   },
   progressBackground: {
-    height: 10,
-    backgroundColor: '#eef4ff',
-    borderRadius: 6,
-    marginTop: 10,
-    overflow: 'hidden'
+    height: 12,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderRadius: 8,
+    marginTop: 16,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.2)'
   },
   progressFill: {
     height: '100%',
-    backgroundColor: '#2196F3'
+    backgroundColor: '#45B7D1',
+    borderRadius: 8
   },
   smallText: {
-    marginTop: 8,
-    color: '#666',
-    fontSize: 12
+    marginTop: 12,
+    color: '#cccccc',
+    fontSize: 14,
+    textAlign: 'center'
   },
   spacing: {
     height: 32
-  }
-  ,
+  },
   modalBackdrop: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.4)',
+    backgroundColor: 'rgba(0,0,0,0.6)',
     justifyContent: 'center',
     alignItems: 'center'
   },
   modalCard: {
     width: '90%',
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 16,
+    backgroundColor: '#1a1a1a',
+    borderRadius: 20,
+    padding: 24,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    elevation: 6
+    shadowOffset: {width: 0, height: 8},
+    shadowOpacity: 0.4,
+    shadowRadius: 16,
+    elevation: 10,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.1)'
   },
   modalTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 12,
-    color: '#222'
+    fontSize: 20,
+    fontWeight: '700',
+    marginBottom: 16,
+    color: '#ffffff',
+    textAlign: 'center'
   },
   modalInput: {
     borderWidth: 1,
-    borderColor: '#e6eefc',
-    backgroundColor: '#fbfdff',
-    padding: 10,
-    borderRadius: 8,
-    marginBottom: 12
+    borderColor: 'rgba(78, 205, 196, 0.3)',
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    padding: 14,
+    borderRadius: 12,
+    marginBottom: 16,
+    color: '#ffffff',
+    fontSize: 16
   },
   modalButtonSecondary: {
-    paddingVertical: 10,
-    paddingHorizontal: 14,
-    borderRadius: 6,
-    backgroundColor: '#f1f5f9',
-    marginRight: 8
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 10,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    marginRight: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.2)'
   },
   modalButtonPrimary: {
-    paddingVertical: 10,
-    paddingHorizontal: 14,
-    borderRadius: 6,
-    backgroundColor: '#2196F3'
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 10,
+    backgroundColor: '#4ECDC4'
   },
   modalButtonText: {
-    color: '#333',
-    fontWeight: '600'
-  }
-  ,
+    color: '#ffffff',
+    fontWeight: '600',
+    fontSize: 16
+  },
   headerRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8
+    marginBottom: 16
   },
   greeting: {
-    color: '#666',
-    fontSize: 14,
-    marginBottom: 2
+    color: '#cccccc',
+    fontSize: 16,
+    marginBottom: 4
   },
   headerAction: {
-    padding: 8,
-    backgroundColor: 'rgba(255,255,255,0.06)',
-    borderRadius: 8
+    padding: 12,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.2)'
   },
   headerActionText: {
-    fontSize: 18
+    fontSize: 20
   },
   topRow: {
     flexDirection: 'row',
-    gap: 12,
-    marginBottom: 12
+    gap: 16,
+    marginBottom: 16
   },
   calorieCard: {
     flex: 1,
-    backgroundColor: '#001F3F',
-    borderRadius: 12,
-    padding: 14,
-    marginRight: 12,
-    justifyContent: 'center'
+    backgroundColor: '#FF6B35',
+    borderRadius: 20,
+    padding: 20,
+    justifyContent: 'center',
+    shadowColor: '#FF6B35',
+    shadowOffset: {width: 0, height: 6},
+    shadowOpacity: 0.4,
+    shadowRadius: 12,
+    elevation: 10
   },
   calorieInner: {
     alignItems: 'center'
   },
   calorieLabel: {
-    color: '#9fbff9',
-    fontSize: 12,
-    marginBottom: 6
+    color: '#ffffff',
+    fontSize: 14,
+    marginBottom: 8,
+    opacity: 0.9
   },
   calorieValue: {
-    color: '#fff',
-    fontSize: 36,
-    fontWeight: '800'
+    color: '#ffffff',
+    fontSize: 40,
+    fontWeight: '900'
   },
   calorieUnit: {
-    color: '#bcd3ff',
-    fontSize: 12
+    color: '#ffffff',
+    fontSize: 14,
+    opacity: 0.8
   },
   calorieGoalTextWrap: {
-    marginTop: 10,
+    marginTop: 16,
     alignItems: 'center'
   },
-  goalSmall: { color: '#cfe0ff', fontSize: 12 },
-  goalNumber: { color: '#fff', fontWeight: '700', marginTop: 4 },
-  remainingText: { color: '#a9c6ff', fontSize: 12, marginTop: 6 },
-  summaryGrid: { width: 120, justifyContent: 'space-between' },
-  statCard: { backgroundColor: '#fff', borderRadius: 8, padding: 10, marginBottom: 8, alignItems: 'center' },
-  statTitle: { color: '#666', fontSize: 12 },
-  statValue: { color: '#003f8a', fontWeight: '700', fontSize: 16 },
-  macrosCard: { backgroundColor: '#fff', borderRadius: 12, padding: 12, marginTop: 8 },
-  macroRow: { flexDirection: 'row', alignItems: 'center', marginTop: 8 },
-  macroLabel: { width: 80, color: '#333' },
-  macroBarBackground: { flex: 1, height: 10, backgroundColor: '#f1f6ff', borderRadius: 8, marginHorizontal: 10, overflow: 'hidden' },
-  macroBarFill: { height: '100%', borderRadius: 8 },
-  macroValue: { width: 48, textAlign: 'right', color: '#444' }
+  goalSmall: { color: '#ffffff', fontSize: 12, opacity: 0.8 },
+  goalNumber: { color: '#ffffff', fontWeight: '700', fontSize: 16, marginTop: 4 },
+  remainingText: { color: '#ffffff', fontSize: 12, marginTop: 6, opacity: 0.9 },
+  summaryGrid: { width: 140, justifyContent: 'space-between' },
+  statCard: { backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: 12, padding: 16, marginBottom: 12, alignItems: 'center', borderWidth: 1, borderColor: 'rgba(255,255,255,0.2)', shadowColor: '#000', shadowOffset: {width: 0, height: 2}, shadowOpacity: 0.2, shadowRadius: 4, elevation: 3 },
+  statTitle: { color: '#cccccc', fontSize: 14, fontWeight: '600' },
+  statValue: { color: '#4ECDC4', fontWeight: '800', fontSize: 20 },
+  macrosCard: { backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: 16, padding: 20, marginTop: 16, borderWidth: 1, borderColor: 'rgba(255,255,255,0.2)', shadowColor: '#000', shadowOffset: {width: 0, height: 4}, shadowOpacity: 0.2, shadowRadius: 8, elevation: 4 },
+  macroRow: { flexDirection: 'row', alignItems: 'center', marginTop: 12 },
+  macroLabel: { width: 80, color: '#ffffff', fontWeight: '600' },
+  macroBarBackground: { flex: 1, height: 12, backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: 10, marginHorizontal: 12, overflow: 'hidden', borderWidth: 1, borderColor: 'rgba(255,255,255,0.2)' },
+  macroBarFill: { height: '100%', borderRadius: 10 },
+  macroValue: { width: 50, textAlign: 'right', color: '#ffffff', fontWeight: '600' }
 })

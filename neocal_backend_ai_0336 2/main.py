@@ -3,6 +3,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from database.db import engine, Base
 import os
 
+# Import models to ensure they are registered before creating tables
+from models import database
+
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
