@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Query, Response
+from fastapi import APIRouter, Depends, HTTPException, Query, Response, Header
 from sqlalchemy.orm import Session
 
 from database.db import get_db
@@ -16,12 +16,26 @@ router = APIRouter(tags=["exercise"])
 
 
 async def get_current_user(
+    x_auth_token: str = Header(None, alias="X-Auth-Token"),
     db: Session = Depends(get_db),
 ) -> str:
     """
-    Auth disabled: always return a shared demo user.
+    Extract and verify user from authentication token.
     """
-    return verify_token(db, "")
+    if not x_auth_token:
+        raise HTTPException(
+            status_code=401,
+            detail="Authentication required"
+        )
+
+    user_id = verify_token(db, x_auth_token)
+    if not user_id:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid or expired token"
+        )
+
+    return user_id
 
 
 @router.post("/exercise", response_model=ExerciseLogResponse, status_code=201)

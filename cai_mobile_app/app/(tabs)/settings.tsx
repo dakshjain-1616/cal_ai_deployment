@@ -11,7 +11,7 @@ import {
 import { clearSession, getSession } from '@/src/services/api'
 
 export default function SettingsScreen() {
-  const [session, setSession] = useState(null)
+  const [session, setSession] = useState<any>(null)
 
   React.useEffect(() => {
     loadSession()
@@ -30,6 +30,7 @@ export default function SettingsScreen() {
         onPress: async () => {
           await clearSession()
           setSession(null)
+          // The layout will automatically redirect to login screen
           Alert.alert('Success', 'Logged out successfully')
         }
       }

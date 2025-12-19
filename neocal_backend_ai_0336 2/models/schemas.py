@@ -27,12 +27,18 @@ class MealResponse(BaseModel):
     total_macros: Macros
     confidence_score: float
 
-class AnonymousSessionRequest(BaseModel):
-    pass
+class UserRegistrationRequest(BaseModel):
+    email: str
+    password: str
 
-class AnonymousSessionResponse(BaseModel):
+class UserLoginRequest(BaseModel):
+    email: str
+    password: str
+
+class AuthResponse(BaseModel):
     token: str
     user_id: str
+    email: str
 
 class UserProfileResponse(BaseModel):
     user_id: str

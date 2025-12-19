@@ -5,12 +5,14 @@ from database.db import Base
 
 class User(Base):
     __tablename__ = "users"
-    
+
     user_id = Column(String, primary_key=True)
+    email = Column(String, unique=True, nullable=False)
+    hashed_password = Column(String, nullable=False)
     daily_calorie_target = Column(Integer, default=2000)
     timezone = Column(String, default="UTC")
     created_at = Column(DateTime, default=datetime.utcnow)
-    
+
     sessions = relationship("Session", back_populates="user")
     meals = relationship("Meal", back_populates="user")
     water_logs = relationship("WaterLog", back_populates="user", cascade="all, delete-orphan")

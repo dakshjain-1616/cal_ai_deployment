@@ -22,12 +22,12 @@ const getStoredSession = async () => {
   }
 }
 
-const storeSession = async (session) => {
-  await AsyncStorage.setItem(SESSION_KEY, JSON.stringify(session))
-}
-
 export const clearSession = async () => {
   await AsyncStorage.removeItem(SESSION_KEY)
+}
+
+export const storeSession = async (session) => {
+  await AsyncStorage.setItem(SESSION_KEY, JSON.stringify(session))
 }
 
 export const getSession = async () => getStoredSession()
@@ -40,26 +40,8 @@ export const ensureSession = async () => {
     return existing.token
   }
 
-  if (!sessionPromise) {
-    sessionPromise = axios
-      .post(`${BACKEND_URL}/auth/anonymous-session`)
-      .then(({ data }) => {
-        const session = {
-          token: data.token,
-          userId: data.user_id
-        }
-        storeSession(session)
-        return session
-      })
-      .catch(error => {
-        console.error('Failed to create session:', error)
-        sessionPromise = null
-        throw error
-      })
-  }
-
-  const session = await sessionPromise
-  return session.token
+  // If no stored session, throw an error to force login
+  throw new Error('No authentication session found. Please login.')
 }
 
 // Setup axios interceptor for auth
@@ -84,7 +66,17 @@ api.interceptors.request.use(async (config) => {
 // Normalize response errors so callers always get an Error with useful message
 api.interceptors.response.use(
   (resp) => resp,
-  (error) => {
+  async (error) => {
+    // Handle 401 Unauthorized - clear session and redirect to login
+    if (error.response?.status === 401) {
+      await clearSession()
+      // Force app to restart authentication flow
+      // This will cause the app to show login screen on next API call
+      const authError = new Error('Authentication required. Please login.')
+      authError.code = 'AUTH_REQUIRED'
+      return Promise.reject(authError)
+    }
+
     // Network errors (no response) are common in RN; wrap with clearer message
     if (!error.response) {
       const e = new Error(`Network Error: cannot reach backend at ${BACKEND_URL}`)
@@ -105,8 +97,18 @@ export const pingBackend = async () => {
   }
 }
 
-// Auth API
+// Create a separate axios instance for auth endpoints that don't require authentication
+const authApiClient = axios.create({
+  baseURL: BACKEND_URL,
+  timeout: 20000
+})
+
+// Auth API (doesn't require authentication)
 export const authApi = {
+  register: (email, password) =>
+    authApiClient.post('/auth/register', { email, password }),
+  login: (email, password) =>
+    authApiClient.post('/auth/login', { email, password }),
   createProfile: (profileData) =>
     api.post('/auth/profile', profileData),
   updateProfile: (userId, profileData) =>

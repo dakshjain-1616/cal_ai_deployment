@@ -1,5 +1,7 @@
 CREATE TABLE users (
     user_id TEXT PRIMARY KEY,
+    email TEXT NOT NULL UNIQUE,
+    hashed_password TEXT NOT NULL,
     daily_calorie_target INTEGER DEFAULT 2000,
     timezone TEXT DEFAULT 'UTC',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

@@ -1,5 +1,5 @@
 from typing import Optional, List
-from fastapi import APIRouter, Depends, HTTPException, Query, UploadFile, File, Response
+from fastapi import APIRouter, Depends, HTTPException, Query, UploadFile, File, Response, Header
 from sqlalchemy.orm import Session
 from database.db import get_db
 from models.schemas import (
@@ -20,15 +20,26 @@ router = APIRouter(tags=["meals"])
 
 # --- Auth Dependency (must be above all route definitions) ---
 async def get_current_user(
+    x_auth_token: str = Header(None, alias="X-Auth-Token"),
     db: Session = Depends(get_db),
 ) -> str:
     """
-    Auth disabled: always return a shared demo user.
-
-    We keep the dependency shape so existing routes work, but ignore headers
-    and rely on verify_token's demo-user behavior.
+    Extract and verify user from authentication token.
     """
-    return verify_token(db, "")
+    if not x_auth_token:
+        raise HTTPException(
+            status_code=401,
+            detail="Authentication required"
+        )
+
+    user_id = verify_token(db, x_auth_token)
+    if not user_id:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid or expired token"
+        )
+
+    return user_id
 
 
 # --- Food Search Endpoint ---

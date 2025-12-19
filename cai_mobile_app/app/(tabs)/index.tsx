@@ -40,8 +40,19 @@ export default function DashboardScreen() {
   const [draftGoal, setDraftGoal] = useState('')
 
   useEffect(() => {
-    fetchDailySummary()
-    fetchCalorieGoal()
+    // Only fetch data if we have a valid session
+    const initializeData = async () => {
+      try {
+        await ensureSession() // This will throw if no session
+        fetchDailySummary()
+        fetchCalorieGoal()
+      } catch (error) {
+        console.log('No valid session, skipping data fetch')
+        setLoading(false)
+      }
+    }
+
+    initializeData()
   }, [])
 
   const fetchCalorieGoal = async () => {
@@ -91,6 +102,14 @@ export default function DashboardScreen() {
       const status = error?.response?.status
       const detail = error?.response?.data?.detail as string | undefined
       const message = error?.message as string | undefined
+      const code = error?.code as string | undefined
+
+      // Handle authentication errors - interceptor should have cleared session
+      if (status === 401 || code === 'AUTH_REQUIRED') {
+        console.log('Authentication error detected, session should be cleared')
+        setError(null) // Don't show error, let layout handle redirect
+        return
+      }
 
       // If the backend returns 404 or "Not Found" for /summary/day,
       // treat it as "no data yet" instead of surfacing an error.
