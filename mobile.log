@@ -1,0 +1,5 @@
+
+> cai_mobile_app@1.0.0 start
+> expo start --web --no-dev-client
+
+unknown or unexpected option: --no-dev-client
